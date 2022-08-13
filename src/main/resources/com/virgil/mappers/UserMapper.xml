@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.virgil.hgtserver.mappers.UserMapper">
+    <insert id="insertUser" parameterType="com.virgil.hgtserver.pojo.User">
+        INSERT into user values (#{ username }, #{ age }, #{ sex }, #{ openid }, #{ session_key }, #{phone}, #{avatar}, #{token}, #{sosphone} )
+    </insert>
+    <select id="queryByToken" parameterType="String" resultType="com.virgil.hgtserver.pojo.User">
+        SELECT * FROM user WHERE token=#{ token }
+    </select>
+    <update id="updateUserMsg" parameterType="com.virgil.hgtserver.pojo.User">
+        UPDATE user SET username=#{username}, age=#{age}, sex=#{sex}, avatar=#{avatar}, phone=#{phone}, sosphone=#{sosPhone} WHERE token=#{token}
+    </update>
+</mapper>

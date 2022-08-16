@@ -13,7 +13,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     @PostMapping("/login")
     public String userLogin( @RequestBody HashMap<String, String> request){
         /*System.out.println("Request Success");*/

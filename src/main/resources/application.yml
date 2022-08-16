@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: HGTServer
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: defaultDataSource
+    url: jdbc:mysql://121.5.154.71:3306/HGT?characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: rootHGT@5
+  banner:
+    image:
+      location: classpath:banner.txt
+
+server:
+  port: 443
+  ssl:
+    key-store: classpath:key/hangout.wang.pfx
+    key-store-type: PKCS12
+    enabled: true
+    key-store-password: HGTServer
+
+mybatis:
+  mapper-locations: classpath:com/virgil/mappers/*xml
+  type-aliases-package: com.virgil.hgtserver.mybatis.entity
+
+logging:
+  config: classpath:log4j2.xml

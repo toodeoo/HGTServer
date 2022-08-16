@@ -12,4 +12,6 @@ public interface UserMapper {
 
     void updateUserMsg(User user);
 
+    int isExist(String token);
+
 }

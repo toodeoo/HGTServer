@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.virgil.hgtserver.mappers.UserMapper;
 import com.virgil.hgtserver.pojo.User;
 import com.virgil.hgtserver.service.UserService;
-import com.virgil.hgtserver.utils.Cypher;
 import com.virgil.hgtserver.utils.WeixinUtils;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,31 +18,31 @@ public class UserServiceImpl implements UserService {
     @Override
     public String login( HashMap<String, String> request ) {
         LoginMsg loginMsg = new LoginMsg();
+        loginMsg.setToken("");
         HashMap<String, String> response = WeixinUtils.getSession(request.get("code"));
+        loginMsg.setErrcode(response.get("errcode"));
         if(response.get("errcode").equals("0")){
-            String token = Cypher.md5Encoder(response.get("openid"));
             User user = new User();
-            user.setUsername(request.get("username"));
-            user.setAvatar(request.get("avatar"));
+            if(!request.get("username").equals(""))
+                user.setUsername(request.get("username"));
+            if(!request.get("avatar").equals(""))
+                user.setAvatar(request.get("avatar"));
             user.setOpenid(response.get("openid"));
             user.setSession_key(response.get("session_key"));
-            user.setToken(token);
+            user.setToken(user.getOpenid());
             try {
-                user.setPhone(WeixinUtils.getPhone(request.get("encryptedData") ,request.get("iv") ,response.get("session_key")));
+                if(!request.get("encryptedData").equals("") && !request.get("iv").equals(""))
+                    user.setPhone(WeixinUtils.getPhone(request.get("encryptedData") ,request.get("iv") ,response.get("session_key")));
             }
             catch (Exception e){
                 e.printStackTrace();
             }
-            userMapper.insertUser(user);
-            loginMsg.setToken(token);
+            if(userMapper.isExist(user.getToken()) == 0)
+                userMapper.insertUser(user);
+            loginMsg.setToken(user.getToken());
             loginMsg.setErrcode("0");
-            return JSONObject.toJSONString(loginMsg);
         }
-        else{
-            loginMsg.setToken("");
-            loginMsg.setErrcode(response.get("errcode"));
-            return JSONObject.toJSONString(loginMsg);
-        }
+        return JSONObject.toJSONString(loginMsg);
     }
 
     @Override
@@ -58,18 +57,23 @@ public class UserServiceImpl implements UserService {
         for (String key : request.keySet()){
             if(key.equals("token"))
                 continue;
-            if (request.get(key).equals(""))
-                continue;
-            if(key.equals("username"))
-                user.setUsername(request.get(key));
-            else if(key.equals("age"))
-                user.setAge(Integer.parseInt(request.get(key)));
-            else if(key.equals("sex"))
-                user.setSex(Integer.parseInt(request.get(key)));
-            else if(key.equals("phone"))
-                user.setPhone(request.get(key));
-            else if(key.equals("sosphone"))
-                user.setSosPhone(request.get(key));
+            switch (key) {
+                case "username":
+                    user.setUsername(request.get(key));
+                    break;
+                case "age":
+                    user.setAge(Integer.parseInt(request.get(key)));
+                    break;
+                case "sex":
+                    user.setSex(Integer.parseInt(request.get(key)));
+                    break;
+                case "phone":
+                    user.setPhone(request.get(key));
+                    break;
+                case "sosphone":
+                    user.setSosPhone(request.get(key));
+                    break;
+            }
         }
         userMapper.updateUserMsg(user);
         return null;

@@ -24,7 +24,7 @@ public class WeixinUtils {
 
     private static final String SECRET = "8abcf7103feceb4c5827f976987a9794";
 
-    public static HashMap<String, String> getSession( String code){
+    public static HashMap<String, String> getSession( String code ){
         RestTemplate restTemplate = new RestTemplate();
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + APPID +
                 "&secret=" + SECRET + "&js_code=" + code + "&grant_type=authorization_code";

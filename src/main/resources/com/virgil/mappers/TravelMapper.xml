@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.virgil.hgtserver.mappers.TravelMapper">
+    <select id="queryMaxId" resultType="int">
+        select travelId from travel order by travelId desc limit 0, 1
+    </select>
+    <insert id="insertTravel"   parameterType="com.virgil.hgtserver.pojo.Travel">
+        insert into travel values(#{id}, #{work}, #{isLeader}, #{token}, #{place}, #{theme}, #{date}, #{date})
+    </insert>
+    <select id="queryByToken" parameterType="String"    resultType="com.virgil.hgtserver.pojo.Travel">
+        select * from travel where token=#{token} order by travelId desc
+    </select>
+</mapper>

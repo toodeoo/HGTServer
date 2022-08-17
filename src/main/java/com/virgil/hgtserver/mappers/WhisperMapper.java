@@ -2,6 +2,7 @@ package com.virgil.hgtserver.mappers;
 
 import com.virgil.hgtserver.pojo.Whisper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,6 +19,6 @@ public interface WhisperMapper {
 
     void updateByPerson(String person);
 
-    List<String> queryAll();
+    List<String> queryAll( @Param ("travelId")int travelId );
 
 }

@@ -1,6 +1,8 @@
 package com.virgil.hgtserver.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.virgil.hgtserver.conf.RetUser;
+import com.virgil.hgtserver.mappers.TravelMapper;
 import com.virgil.hgtserver.mappers.UserMapper;
 import com.virgil.hgtserver.pojo.User;
 import com.virgil.hgtserver.service.UserService;
@@ -15,6 +17,10 @@ import java.util.HashMap;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private TravelMapper travelMapper;
+
     @Override
     public String login( HashMap<String, String> request ) {
         LoginMsg loginMsg = new LoginMsg();
@@ -30,13 +36,8 @@ public class UserServiceImpl implements UserService {
             user.setOpenid(response.get("openid"));
             user.setSession_key(response.get("session_key"));
             user.setToken(user.getOpenid());
-            try {
-                if(!request.get("encryptedData").equals("") && !request.get("iv").equals(""))
-                    user.setPhone(WeixinUtils.getPhone(request.get("encryptedData") ,request.get("iv") ,response.get("session_key")));
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
+            if(!request.get("phoneCode").equals(""))
+                user.setPhone(WeixinUtils.getPhone(request.get("phoneCode")));
             if(userMapper.isExist(user.getToken()) == 0)
                 userMapper.insertUser(user);
             loginMsg.setToken(user.getToken());
@@ -48,7 +49,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getUserMsg( String token ) {
         User user = userMapper.queryByToken(token);
-        return JSONObject.toJSONString(user);
+        RetUser retUser = new RetUser(user);
+        return JSONObject.toJSONString(retUser);
     }
 
     @Override
@@ -65,7 +67,7 @@ public class UserServiceImpl implements UserService {
                     user.setAge(Integer.parseInt(request.get(key)));
                     break;
                 case "sex":
-                    user.setSex(Integer.parseInt(request.get(key)));
+                    user.setSex(request.get(key));
                     break;
                 case "phone":
                     user.setPhone(request.get(key));
@@ -73,6 +75,9 @@ public class UserServiceImpl implements UserService {
                 case "sosphone":
                     user.setSosPhone(request.get(key));
                     break;
+                case "work":
+                    travelMapper.updateWorkByToken(request.get("token"), request.get("work"),
+                            Integer.parseInt(request.get("travelId")));
             }
         }
         userMapper.updateUserMsg(user);
@@ -93,3 +98,4 @@ class LoginMsg{
                 "}";
     }
 }
+

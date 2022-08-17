@@ -8,6 +8,6 @@ public interface WhisperService {
 
     String getHistoryMsg(String person);
 
-    String getAllUser();
+    String getAllUser(String token);
 
 }

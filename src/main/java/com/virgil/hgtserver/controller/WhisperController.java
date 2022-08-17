@@ -33,8 +33,8 @@ public class WhisperController {
     }
 
     @GetMapping("/allUser")
-    public String getAllUser(){
-        return whisperService.getAllUser();
+    public String getAllUser(@RequestParam("token")String token){
+        return whisperService.getAllUser(token);
     }
 
 }

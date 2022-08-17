@@ -2,6 +2,7 @@ package com.virgil.hgtserver.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.virgil.hgtserver.conf.RetCode;
+import com.virgil.hgtserver.mappers.TravelMapper;
 import com.virgil.hgtserver.mappers.WhisperMapper;
 import com.virgil.hgtserver.pojo.Whisper;
 import com.virgil.hgtserver.service.WhisperService;
@@ -9,6 +10,7 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,9 @@ public class WhisperServiceImpl implements WhisperService {
 
     @Autowired
     private WhisperMapper whisperMapper;
+
+    @Autowired
+    private TravelMapper travelMapper;
 
     @Override
     public String writeWhisper( String text ,String person ) {
@@ -27,6 +32,7 @@ public class WhisperServiceImpl implements WhisperService {
         whisper.setIsRead(1);
         int id = whisperMapper.queryMaxId() + 1;
         whisper.setId(id);
+        whisper.setTime(LocalDate.now().toString());
         whisperMapper.insertWhisper(whisper);
         return JSONObject.toJSONString(new RetCode(code));
     }
@@ -47,7 +53,7 @@ public class WhisperServiceImpl implements WhisperService {
         int code = list.size() > 0 ? 1 : 0;
         List<retWhisper> retList = new ArrayList<>();
         for (Whisper whisper: list){
-            retList.add(new retWhisper(whisper.getText()));
+            retList.add(new retWhisper(whisper));
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", code);
@@ -56,8 +62,9 @@ public class WhisperServiceImpl implements WhisperService {
     }
 
     @Override
-    public String getAllUser() {
-        List<String> list = whisperMapper.queryAll();
+    public String getAllUser(String token) {
+        int id = travelMapper.queryMaxIdWithToken(token);
+        List<String> list = whisperMapper.queryAll(id);
         int code = list.size() > 0 ? 1 : 0;
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", code);
@@ -68,8 +75,10 @@ public class WhisperServiceImpl implements WhisperService {
 
 @Data
 class retWhisper{
-    public retWhisper(String text){
-        this.text = text;
+    public retWhisper(Whisper whisper){
+        this.text = whisper.getText();
+        this.text = whisper.getTime();
     }
-    String text;
+    private String text;
+    private String time;
 }

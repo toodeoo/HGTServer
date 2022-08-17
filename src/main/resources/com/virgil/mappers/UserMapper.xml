@@ -15,4 +15,7 @@
     <select id="isExist" parameterType="String" resultType="int">
         select count(token) from user where token=#{token}
     </select>
+    <select id="querySessionByToken" parameterType="String" resultType="String">
+        select session_key from user where token=#{token}
+    </select>
 </mapper>

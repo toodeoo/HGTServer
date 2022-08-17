@@ -34,7 +34,7 @@ public class WeixinUtils {
     }
 
     @Contract("_, _, _ -> new")
-    public static @NotNull String getPhone( String encryptedData,String iv,String sessionKey) throws NoSuchPaddingException,
+    public static @NotNull String decode( String encryptedData,String iv,String sessionKey) throws NoSuchPaddingException,
             NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         byte[] encData = Cypher.Base64Decoder(encryptedData);
         byte[] ivData = Cypher.Base64Decoder(iv);
@@ -44,6 +44,31 @@ public class WeixinUtils {
         SecretKeySpec keySpec = new SecretKeySpec(sessionData, "AES");
         cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
         return new String(cipher.doFinal(encData));
+    }
+
+    public static String getActiveId(String openId){
+        RestTemplate restTemplate = new RestTemplate();
+        String url_token = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&" + "appid=" + APPID +
+                "&secret=" + SECRET;
+        JSONObject jsonObject = JSONObject.parseObject(restTemplate.getForObject(url_token, String.class));
+        String token = (String) jsonObject.get("access_token");
+        String url_id = "https://api.weixin.qq.com/cgi-bin/message/wxopen/activityid/create?access_token=" + token +
+                "&openid=" + openId;
+        jsonObject = JSONObject.parseObject(restTemplate.getForObject(url_id, String.class));
+        return (String) jsonObject.get("activity_id");
+    }
+
+    public static String getPhone(String code){
+        RestTemplate restTemplate = new RestTemplate();
+        String url_token = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&" + "appid=" + APPID +
+                "&secret=" + SECRET;
+        JSONObject jsonObject = JSONObject.parseObject(restTemplate.getForObject(url_token, String.class));
+        String token = (String) jsonObject.get("access_token");
+        String url = "https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token=" + token;
+        JSONObject request = new JSONObject();
+        request.put("code", code);
+        jsonObject = JSONObject.parseObject(restTemplate.postForObject(url, request, String.class));
+        return (String) jsonObject.getJSONObject("phone_info").get("purePhoneNumber");
     }
 
 }

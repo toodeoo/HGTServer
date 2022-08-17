@@ -14,4 +14,6 @@ public interface UserMapper {
 
     int isExist(String token);
 
+    String querySessionByToken(String token);
+
 }

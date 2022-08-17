@@ -12,6 +12,14 @@ public class Travel {
         this.place = place;
         this.token = token;
     }
+    public Travel(Travel travel){
+        this.theme = travel.getTheme();
+        this.place = travel.getPlace();
+        this.activeId = travel.getActiveId();
+        this.date = travel.getDate();
+        this.id = travel.getId();
+        this.isLeader = 0;
+    }
     private String theme;
     private String place;
     private int id;
@@ -19,4 +27,6 @@ public class Travel {
     private int isLeader;
     private String token;
     private Date date;
+    private String activeId;
+
 }

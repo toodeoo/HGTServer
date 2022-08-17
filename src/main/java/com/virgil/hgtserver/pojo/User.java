@@ -6,12 +6,12 @@ import lombok.Data;
 public class User {
     public User(){
         age = 0;
-        sex = 0;
+        sex = "未知";
         sosPhone = "110";
     }
     private String username;
     private int age;
-    private int sex;
+    private String sex;
     private String openid;
     private String session_key;
     private String phone;

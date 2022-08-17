@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.virgil.hgtserver.mappers.WhisperMapper">
     <insert id="insertWhisper" parameterType="com.virgil.hgtserver.pojo.Whisper">
-        insert into whisper values(#{text}, #{id}, #{person}, #{isRead})
+        insert into whisper values(#{text}, #{id}, #{person}, #{isRead}, #{time})
     </insert>
     <select id="queryMaxId" resultType="int">
         select id from whisper order by id desc limit 0, 1
@@ -13,12 +13,12 @@
         select sum(isRead) from whisper where person=#{person}
     </select>
     <select id="queryByPerson" resultType="com.virgil.hgtserver.pojo.Whisper" parameterType="String">
-        select * from whisper where person=#{person}
+        select * from whisper where person=#{person} order by time desc
     </select>
     <update id="updateByPerson" parameterType="String">
         update whisper set isRead=0 where person=#{person}
     </update>
-    <select id="queryALl" resultType="String">
-
+    <select id="queryALl">
+        select user.username from user inner join travel t on user.token = t.token where t.travelId=#{travelId}
     </select>
 </mapper>

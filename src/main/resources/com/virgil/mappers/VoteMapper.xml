@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.virgil.hgtserver.mappers.VoteMapper">
+    <select id="queryNumByToken">
+        select count(code) from vote where token=#{token}
+    </select>
+    <delete id="delBeyondTime">
+        delete vote, voteText from vote left join voteText on vote.code = voteText.code
+                              where date(vote.endTime) not between date(#{endTime}) and date(startTime)
+    </delete>
+    <select id="size" resultType="int">
+        select count(code) from vote
+    </select>
+    <select id="queryMaxCode" resultType="int">
+        select code from vote order by code desc limit 0, 1
+    </select>
+    <insert id="insertVote">
+        insert into vote values(#{code}, #{token}, #{startTime}, #{endTime}, 1)
+    </insert>
+    <insert id="insertVoteText">
+        insert into voteText values(#{code}, #{text})
+    </insert>
+    <insert id="addUser">
+        insert into vote values (#{code}, #{token}, #{startTime}, #{endTime}, 1)
+    </insert>
+    <select id="queryCodeByToken" resultType="int">
+        select code from vote where token=#{token}
+    </select>
+    <select id="queryTextByCode" resultType="String">
+        select text from voteText where code=#{code}
+    </select>
+    <select id="queryIsVoteByToken" resultType="int">
+        select sum(isVote) from vote where token=#{token}
+    </select>
+    <update id="updateTextByCode">
+        update voteText set text=#{text} where code=#{code}
+    </update>
+    <update id="updateIsVote">
+        update vote set isVote=0 where token=#{token}
+    </update>
+    <select id="queryIsVote" resultType="int">
+        select isVote from vote where token=#{token}
+    </select>
+</mapper>

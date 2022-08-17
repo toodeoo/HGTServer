@@ -11,7 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+@EnableScheduling
 @SpringBootApplication
 @MapperScan("com.virgil.hgtserver.mappers")
 public class HgtServerApplication {
@@ -20,7 +22,7 @@ public class HgtServerApplication {
         SpringApplication.run(HgtServerApplication.class ,args);
     }
 
-/*    @Value("${http.port:80}")
+    @Value("${http.port:80}")
     Integer httpPort;
 
     @Value("${server.port:443}")
@@ -53,6 +55,6 @@ public class HgtServerApplication {
         connector.setSecure(false);
         connector.setRedirectPort(httpsPort);
         return connector;
-    }*/
+    }
 
 }

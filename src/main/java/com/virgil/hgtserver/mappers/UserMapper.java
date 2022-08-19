@@ -2,6 +2,7 @@ package com.virgil.hgtserver.mappers;
 
 import com.virgil.hgtserver.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 
 @Mapper
@@ -12,7 +13,7 @@ public interface UserMapper {
 
     void updateUserMsg(User user);
 
-    int isExist(String token);
+    String isExist(String token);
 
     String querySessionByToken(String token);
 

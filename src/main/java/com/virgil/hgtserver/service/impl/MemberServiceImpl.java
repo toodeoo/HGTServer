@@ -43,8 +43,17 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String getMemberDetails( int travelId ,String username ) {
         String token = travelMapper.queryToken(travelId, username);
-        RetUser retUser = new RetUser(userMapper.queryByToken(token));
-        return JSONObject.toJSONString(retUser);
+        if(token != null) {
+            RetUser retUser = new RetUser(userMapper.queryByToken(token));
+            retUser.setIsLeader(travelMapper.queryIsLeader(token, travelId));
+            retUser.setWork(travelMapper.queryWork(token, travelId));
+            return JSONObject.toJSONString(retUser);
+        }
+        else {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("errMsg", "No such user");
+            return jsonObject.toJSONString();
+        }
     }
 
 

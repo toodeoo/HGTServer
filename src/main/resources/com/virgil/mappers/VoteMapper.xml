@@ -3,14 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.virgil.hgtserver.mappers.VoteMapper">
-    <select id="queryNumByToken">
+    <select id="queryNumByToken" resultType="String">
         select count(code) from vote where token=#{token}
     </select>
     <delete id="delBeyondTime">
         delete vote, voteText from vote left join voteText on vote.code = voteText.code
                               where date(vote.endTime) not between date(#{endTime}) and date(startTime)
     </delete>
-    <select id="size" resultType="int">
+    <select id="size" resultType="String">
         select count(code) from vote
     </select>
     <select id="queryMaxCode" resultType="int">
@@ -25,13 +25,13 @@
     <insert id="addUser">
         insert into vote values (#{code}, #{token}, #{startTime}, #{endTime}, 1)
     </insert>
-    <select id="queryCodeByToken" resultType="int">
+    <select id="queryCodeByToken" resultType="String">
         select code from vote where token=#{token}
     </select>
     <select id="queryTextByCode" resultType="String">
         select text from voteText where code=#{code}
     </select>
-    <select id="queryIsVoteByToken" resultType="int">
+    <select id="queryIsVoteByToken" resultType="String">
         select sum(isVote) from vote where token=#{token}
     </select>
     <update id="updateTextByCode">

@@ -1,6 +1,7 @@
 package com.virgil.hgtserver.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.virgil.hgtserver.conf.RetCode;
 import com.virgil.hgtserver.conf.RetUser;
 import com.virgil.hgtserver.mappers.TravelMapper;
 import com.virgil.hgtserver.mappers.UserMapper;
@@ -36,10 +37,11 @@ public class UserServiceImpl implements UserService {
             user.setOpenid(response.get("openid"));
             user.setSession_key(response.get("session_key"));
             user.setToken(user.getOpenid());
-            if(!request.get("phoneCode").equals(""))
-                user.setPhone(WeixinUtils.getPhone(request.get("phoneCode")));
-            if(userMapper.isExist(user.getToken()) == 0)
+            if(userMapper.isExist(user.getToken()) != null)
                 userMapper.insertUser(user);
+            else
+                userMapper.updateUserMsg(user);
+
             loginMsg.setToken(user.getToken());
             loginMsg.setErrcode("0");
         }
@@ -49,7 +51,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getUserMsg( String token ) {
         User user = userMapper.queryByToken(token);
-        RetUser retUser = new RetUser(user);
+        RetUser retUser;
+        if(user == null) {
+           retUser = new RetUser();
+           retUser.setCode(-1);
+        }
+        else {
+            retUser = new RetUser(user);
+        }
         return JSONObject.toJSONString(retUser);
     }
 
@@ -58,6 +67,8 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.queryByToken(request.get("token"));
         for (String key : request.keySet()){
             if(key.equals("token"))
+                continue;
+            if(request.get(key).equals(""))
                 continue;
             switch (key) {
                 case "username":
@@ -81,7 +92,7 @@ public class UserServiceImpl implements UserService {
             }
         }
         userMapper.updateUserMsg(user);
-        return null;
+        return JSONObject.toJSONString(new RetCode(0));
     }
 }
 

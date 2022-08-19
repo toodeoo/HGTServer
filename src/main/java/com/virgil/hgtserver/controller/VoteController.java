@@ -23,7 +23,6 @@ public class VoteController {
     public String createVote( @RequestBody HashMap<String, Object> request ){
         String token = (String) request.get("token");
         List<String> list = (List<String>) request.get("vote");
-        System.out.println(list.toString());
         return voteService.createVote(token, list);
     }
 

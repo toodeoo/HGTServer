@@ -6,10 +6,10 @@
     <insert id="insertWhisper" parameterType="com.virgil.hgtserver.pojo.Whisper">
         insert into whisper values(#{text}, #{id}, #{person}, #{isRead}, #{time})
     </insert>
-    <select id="queryMaxId" resultType="int">
+    <select id="queryMaxId" resultType="String">
         select id from whisper order by id desc limit 0, 1
     </select>
-    <select id="queryNewMsg" parameterType="String" resultType="int">
+    <select id="queryNewMsg" parameterType="String" resultType="String">
         select sum(isRead) from whisper where person=#{person}
     </select>
     <select id="queryByPerson" resultType="com.virgil.hgtserver.pojo.Whisper" parameterType="String">
@@ -18,7 +18,7 @@
     <update id="updateByPerson" parameterType="String">
         update whisper set isRead=0 where person=#{person}
     </update>
-    <select id="queryALl">
+    <select id="queryAll" resultType="String">
         select user.username from user inner join travel t on user.token = t.token where t.travelId=#{travelId}
     </select>
 </mapper>

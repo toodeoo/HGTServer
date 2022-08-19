@@ -11,9 +11,9 @@ import java.util.List;
 public interface WhisperMapper {
     void insertWhisper( Whisper whisper );
 
-    int queryMaxId();
+    String queryMaxId();
 
-    int queryNewMsg( String person );
+    String queryNewMsg( String person );
 
     List<Whisper> queryByPerson(String person);
 

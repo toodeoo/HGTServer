@@ -3,8 +3,10 @@ package com.virgil.hgtserver.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.virgil.hgtserver.conf.RetCode;
 import com.virgil.hgtserver.mappers.TravelMapper;
+import com.virgil.hgtserver.mappers.UserMapper;
 import com.virgil.hgtserver.mappers.WhisperMapper;
 import com.virgil.hgtserver.pojo.Whisper;
+import com.virgil.hgtserver.service.UserService;
 import com.virgil.hgtserver.service.WhisperService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class WhisperServiceImpl implements WhisperService {
     @Autowired
     private TravelMapper travelMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     public String writeWhisper( String text ,String person ) {
         int code = 0;
@@ -30,7 +35,7 @@ public class WhisperServiceImpl implements WhisperService {
         whisper.setText(text);
         whisper.setPerson(person);
         whisper.setIsRead(1);
-        int id = whisperMapper.queryMaxId() + 1;
+        int id = whisperMapper.queryMaxId() == null ? 0 : Integer.parseInt(whisperMapper.queryMaxId()) + 1;
         whisper.setId(id);
         whisper.setTime(LocalDate.now().toString());
         whisperMapper.insertWhisper(whisper);
@@ -40,7 +45,7 @@ public class WhisperServiceImpl implements WhisperService {
     @Override
     public String hasNewMsg( String person ) {
         int code = 0;
-        if(whisperMapper.queryNewMsg(person) > 0){
+        if(whisperMapper.queryNewMsg(person) != null){
             code = 1;
         }
         return JSONObject.toJSONString(new RetCode(code));
@@ -63,7 +68,7 @@ public class WhisperServiceImpl implements WhisperService {
 
     @Override
     public String getAllUser(String token) {
-        int id = travelMapper.queryMaxIdWithToken(token);
+        int id = travelMapper.queryMaxIdWithToken(token) == null ? -1 : Integer.parseInt(travelMapper.queryMaxIdWithToken(token));
         List<String> list = whisperMapper.queryAll(id);
         int code = list.size() > 0 ? 1 : 0;
         JSONObject jsonObject = new JSONObject();
@@ -77,7 +82,7 @@ public class WhisperServiceImpl implements WhisperService {
 class retWhisper{
     public retWhisper(Whisper whisper){
         this.text = whisper.getText();
-        this.text = whisper.getTime();
+        this.time = whisper.getTime();
     }
     private String text;
     private String time;

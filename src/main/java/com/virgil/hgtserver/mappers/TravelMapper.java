@@ -30,5 +30,5 @@ public interface TravelMapper {
 
     int queryPeopleNumById( @Param("travelId") int id );
 
-    int queryMaxIdWithToken( @Param("token") String token );
+    String queryMaxIdWithToken( @Param("token") String token );
 }

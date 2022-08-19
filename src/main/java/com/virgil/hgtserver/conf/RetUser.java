@@ -24,4 +24,10 @@ class RetUser {
     private String phone;
     private String avatar;
     private String sosPhone;
+
+    private int isLeader;
+
+    private String work;
+
+    private int code;
 }

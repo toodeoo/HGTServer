@@ -12,7 +12,7 @@
     <update id="updateUserMsg" parameterType="com.virgil.hgtserver.pojo.User">
         UPDATE user SET username=#{username}, age=#{age}, sex=#{sex}, avatar=#{avatar}, phone=#{phone}, sosPhone=#{sosPhone} WHERE token=#{token}
     </update>
-    <select id="isExist" parameterType="String" resultType="int">
+    <select id="isExist" parameterType="String" resultType="String">
         select count(token) from user where token=#{token}
     </select>
     <select id="querySessionByToken" parameterType="String" resultType="String">

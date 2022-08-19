@@ -28,16 +28,16 @@
     <select id="queryIsLeader" resultType="int">
         select isLeader from travel where token=#{token} and travelId=#{travelId}
     </select>
-    <select id="queryWork" resultType="int">
+    <select id="queryWork" resultType="String">
         select work from travel where token=#{token} and travelId=#{travelId}
     </select>
-    <select id="queryToken">
-        select u.token from user u inner join travel t on u.token = t.token where t.travelId=#{travelId}
+    <select id="queryToken" resultType="String">
+        select u.token from user u inner join travel t on u.token = t.token where t.travelId=#{travelId} and u.username=#{username}
     </select>
     <select id="queryPeopleNumById" resultType="int">
         select count(token) from travel where travelId=#{travelId}
     </select>
-    <select id="queryMaxIdWithToken" resultType="int">
+    <select id="queryMaxIdWithToken" resultType="String">
         select travelId from travel where token=#{token} order by travelId desc limit 0, 1
     </select>
 </mapper>

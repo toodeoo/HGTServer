@@ -20,4 +20,6 @@ public interface TravelService {
     String getDetails(int travelId);
 
     String uploadImg( String token ,int travelId ,String time ,String filePath );
+
+    String downloadImg( String token ,int travelId ,String time );
 }

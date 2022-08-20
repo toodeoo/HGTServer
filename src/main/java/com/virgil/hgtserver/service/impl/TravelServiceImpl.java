@@ -104,7 +104,16 @@ public class TravelServiceImpl implements TravelService {
 
     @Override
     public String uploadImg( String token ,int travelId ,String time ,String filePath ) {
-        return null;
+        travelMapper.insertImg(token, travelId, time, filePath);
+        return JSONObject.toJSONString(new RetCode(1));
+    }
+
+    @Override
+    public String downloadImg( String token ,int travelId ,String time ) {
+        String filePath = travelMapper.queryImgPath(token, travelId, time);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("filePath", filePath);
+        return jsonObject.toJSONString();
     }
 }
 

@@ -31,4 +31,8 @@ public interface TravelMapper {
     int queryPeopleNumById( @Param("travelId") int id );
 
     String queryMaxIdWithToken( @Param("token") String token );
+
+    void insertImg(@Param("token") String token , @Param("travelId") int travelId , @Param("time") String time , @Param("filePath") String filePath );
+
+    String queryImgPath( @Param("token") String token , @Param("travelId") int travelId , @Param("time") String time );
 }

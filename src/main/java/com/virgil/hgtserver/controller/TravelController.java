@@ -55,4 +55,9 @@ public class TravelController {
         return travelService.uploadImg(token, travelId, time, filePath);
     }
 
+    @GetMapping("/downloadImg")
+    public String downloadImg(@RequestParam("token")String token, @RequestParam("travelId")int travelId, @RequestParam("time")String time){
+        return travelService.downloadImg(token, travelId, time);
+    }
+
 }

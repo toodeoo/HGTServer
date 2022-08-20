@@ -3,8 +3,10 @@ package com.virgil.hgtserver;
 import com.virgil.hgtserver.mappers.TravelMapper;
 import com.virgil.hgtserver.mappers.UserMapper;
 import com.virgil.hgtserver.mappers.VoteMapper;
+import com.virgil.hgtserver.mappers.WishMapper;
 import com.virgil.hgtserver.service.TravelService;
 import com.virgil.hgtserver.service.VoteService;
+import com.virgil.hgtserver.service.WishService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,11 +35,16 @@ class HgtServerApplicationTests {
 
     private final String token = "osDXq5IFPw3eERUD8LejfgAF0108";
 
+    @Autowired
+    private WishService wishService;
+
+    @Autowired
+    private WishMapper wishMapper;
+
     @Test
     public void  myTest(){
-        List<String> list = new ArrayList<>();
-        list.add("111");
-        list.add("222");
-        voteService.createVote(token, list);
+        wishMapper.insertDefault("外卖！！！", 10, "eat", 1);
+        wishMapper.insertDefault("不出门，自己做", 10, "eat", 1);
+        wishMapper.insertDefault("不吃了", 10, "eat", 1);
     }
 }

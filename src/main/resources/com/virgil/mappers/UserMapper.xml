@@ -18,4 +18,7 @@
     <select id="querySessionByToken" parameterType="String" resultType="String">
         select session_key from user where token=#{token}
     </select>
+    <select id="queryAvatarByToken" resultType="String">
+        select avatar from user where token=#{token}
+    </select>
 </mapper>

@@ -5,6 +5,7 @@ import com.virgil.hgtserver.conf.RetCode;
 import com.virgil.hgtserver.mappers.TravelDetailsMapper;
 import com.virgil.hgtserver.mappers.TravelMapper;
 import com.virgil.hgtserver.mappers.UserMapper;
+import com.virgil.hgtserver.mappers.WishMapper;
 import com.virgil.hgtserver.pojo.Travel;
 import com.virgil.hgtserver.pojo.TravelDetails;
 import com.virgil.hgtserver.service.TravelService;
@@ -36,6 +37,9 @@ public class TravelServiceImpl implements TravelService {
     @Autowired
     private TravelDetailsMapper travelDetailsMapper;
 
+    @Autowired
+    private WishMapper wishMapper;
+
     @Override
     public String createTravel( Travel travel ) {
         int code = 1;
@@ -45,6 +49,9 @@ public class TravelServiceImpl implements TravelService {
         travel.setDate(new Date());
         travel.setActiveId(WeixinUtils.getActiveId(travel.getToken()));
         travelMapper.insertTravel(travel);
+        wishMapper.insertDefault("外卖！！！", 10, "eat", id);
+        wishMapper.insertDefault("不出门，自己做", 10, "eat", id);
+        wishMapper.insertDefault("不吃了", 10, "eat", id);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", code);
         jsonObject.put("activityId", travel.getActiveId());
@@ -87,7 +94,17 @@ public class TravelServiceImpl implements TravelService {
     @Override
     public String getDetails( int travelId ) {
         TravelDetails travelDetails = travelDetailsMapper.queryCertainTravel(travelId);
-        return JSONObject.toJSONString(travelDetails);
+        if(travelDetails != null) {
+            return JSONObject.toJSONString(travelDetails);
+        }
+        else {
+            return JSONObject.toJSONString(new RetCode(-1));
+        }
+    }
+
+    @Override
+    public String uploadImg( String token ,int travelId ,String time ,String filePath ) {
+        return null;
     }
 }
 

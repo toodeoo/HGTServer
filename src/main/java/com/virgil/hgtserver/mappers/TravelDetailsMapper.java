@@ -9,4 +9,5 @@ public interface TravelDetailsMapper {
 
     TravelDetails queryCertainTravel( @Param("travelId")int travelId);
 
+    void insertNewDetail( TravelDetails travelDetails );
 }

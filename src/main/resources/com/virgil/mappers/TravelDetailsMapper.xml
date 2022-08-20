@@ -6,4 +6,7 @@
     <select id="queryCertainTravel" resultType="com.virgil.hgtserver.pojo.TravelDetails">
         select * from travelDetails where travelId=#{travelId}
     </select>
+    <insert id="insertNewDetail" parameterType="com.virgil.hgtserver.pojo.TravelDetails">
+        insert into travelDetails values (#{travelId}, #{breakfast}, #{morning}, #{lunch}, #{afternoon}, #{dinner}, #{date})
+    </insert>
 </mapper>

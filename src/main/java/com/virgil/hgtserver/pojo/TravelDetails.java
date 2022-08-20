@@ -2,7 +2,7 @@ package com.virgil.hgtserver.pojo;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class TravelDetails {
@@ -11,6 +11,6 @@ public class TravelDetails {
     private String lunch;
     private String afternoon;
     private String dinner;
-    private Date date;
+    private LocalDate date;
     private int travelId;
 }

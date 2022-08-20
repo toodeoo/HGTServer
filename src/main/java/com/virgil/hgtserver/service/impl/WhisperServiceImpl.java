@@ -45,10 +45,14 @@ public class WhisperServiceImpl implements WhisperService {
     @Override
     public String hasNewMsg( String person ) {
         int code = 0;
-        if(whisperMapper.queryNewMsg(person) != null){
+        JSONObject jsonObject = new JSONObject();
+        if(whisperMapper.queryNewMsg(person) != null && !whisperMapper.queryNewMsg(person).equals("0")){
             code = 1;
+            jsonObject.put("whisper", whisperMapper.queryNew(person));
+            whisperMapper.updateByPerson(person);
         }
-        return JSONObject.toJSONString(new RetCode(code));
+        jsonObject.put("code", code);
+        return jsonObject.toJSONString();
     }
 
     @Override

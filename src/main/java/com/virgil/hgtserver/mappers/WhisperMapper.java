@@ -21,4 +21,5 @@ public interface WhisperMapper {
 
     List<String> queryAll( @Param ("travelId")int travelId );
 
+    String queryNew( String person );
 }

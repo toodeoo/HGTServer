@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.virgil.hgtserver.mappers.WishMapper">
+    <resultMap id="summaryMap" type="com.virgil.hgtserver.conf.SummaryWish">
+        <id column="wish" property="wish"/>
+        <id column="GROUP_CONCAT(distinct class)" property="flag"/>
+        <id column="sum" property="summaryDouzi"/>
+    </resultMap>
+    <select id="queryWish" resultType="com.virgil.hgtserver.pojo.Wish">
+        select * from wishList where travelId=#{travelId} and class=#{class}
+    </select>
+    <insert id="insertWish" parameterType="com.virgil.hgtserver.pojo.Wish">
+        insert into wishList values(#{travelId}, #{wish}, #{token}, #{class}, #{douzi}, #{isEnd})
+    </insert>
+    <select id="queryDouzi" resultType="int">
+        select douzi from wishList where token=#{token} and travelId=#{travelId} and wish=#{wish} and class=#{class}
+    </select>
+    <update id="updateDouzi" >
+        update wishList set douzi=#{douzi} where token=#{token} and travelId=#{travelId} and wish=#{wish} and class=#{class}
+    </update>
+    <update id="updateIsEnd">
+        update wishList set isEnd=0 where token=#{token} and travelId=#{travelId}
+    </update>
+    <select id="queryIsEnd" resultType="String">
+        select sum(isEnd) from wishList where token=#{token} and travelId=#{travelId}
+    </select>
+    <update id="updateAllIsEnd">
+        update wishList set isEnd=0 where travelId=#{travelId}
+    </update>
+    <select id="querySummary" resultMap="summaryMap">
+        select wish, group_concat(distinct class), sum(douzi) as sum from wishList where travelId=#{travelId} group by wish
+    </select>
+    <insert id="insertDefault" >
+        insert into wishList (travelId, wish, douzi, class) values (#{travelId}, #{wish}, #{douzi}, #{class})
+    </insert>
+</mapper>

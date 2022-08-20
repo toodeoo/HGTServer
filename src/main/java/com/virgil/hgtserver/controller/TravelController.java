@@ -4,6 +4,7 @@ import com.virgil.hgtserver.pojo.Travel;
 import com.virgil.hgtserver.service.TravelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -43,6 +44,15 @@ public class TravelController {
     @GetMapping("/details")
     public String getTravelDetails(@RequestParam("travelId")int travelId){
         return travelService.getDetails(travelId);
+    }
+
+    @PostMapping("/uploadImg")
+    public String uploadImg( @RequestBody HashMap<String, String> request ){
+        String token = request.get("token");
+        int travelId = Integer.parseInt(request.get("travelId"));
+        String time = request.get("time");
+        String filePath = request.get("filePath");
+        return travelService.uploadImg(token, travelId, time, filePath);
     }
 
 }

@@ -21,4 +21,7 @@
     <select id="queryAll" resultType="String">
         select user.username from user inner join travel t on user.token = t.token where t.travelId=#{travelId}
     </select>
+    <select id="queryNew" resultType="String">
+        select text from whisper where person=#{person} and isRead=1 order by time desc limit 0, 1
+    </select>
 </mapper>

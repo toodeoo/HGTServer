@@ -21,4 +21,7 @@
     <select id="queryAvatarByToken" resultType="String">
         select avatar from user where token=#{token}
     </select>
+    <select id="queryUserName" resultType="String">
+        select username from user where token=#{token}
+    </select>
 </mapper>

@@ -6,6 +6,7 @@ import com.virgil.hgtserver.mappers.TravelDetailsMapper;
 import com.virgil.hgtserver.mappers.TravelMapper;
 import com.virgil.hgtserver.mappers.UserMapper;
 import com.virgil.hgtserver.mappers.WishMapper;
+import com.virgil.hgtserver.pojo.SummaryWish;
 import com.virgil.hgtserver.pojo.Travel;
 import com.virgil.hgtserver.pojo.TravelDetails;
 import com.virgil.hgtserver.service.TravelService;
@@ -22,6 +23,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -55,6 +57,7 @@ public class TravelServiceImpl implements TravelService {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", code);
         jsonObject.put("activityId", travel.getActiveId());
+        jsonObject.put("travelId", travel.getId());
         return jsonObject.toJSONString();
     }
 
@@ -114,6 +117,28 @@ public class TravelServiceImpl implements TravelService {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("filePath", filePath);
         return jsonObject.toJSONString();
+    }
+
+    @Override
+    public String getWish(int travelId ) {
+        HashMap<String, List<String>> hashMap = new HashMap<>();
+        List<SummaryWish> list = travelMapper.queryAllById(travelId);
+        for(SummaryWish summaryWish: list){
+            if(!hashMap.containsKey(summaryWish.getFlag())){
+                List<String> l = new ArrayList<>();
+                l.add(userMapper.queryUserName(summaryWish.getToken()) + ": " + summaryWish.getText());
+                hashMap.put(summaryWish.getFlag(), l);
+            }
+            else
+                hashMap.get(summaryWish.getFlag()).add(userMapper.queryUserName(summaryWish.getToken()) + ": " + summaryWish.getText());
+        }
+        return JSONObject.toJSONString(hashMap);
+    }
+
+    @Override
+    public String postWish( String token ,String flag ,String text ,int travelId ) {
+        travelMapper.insertWish(token, flag, text, travelId);
+        return JSONObject.toJSONString(new RetCode((0)));
     }
 }
 

@@ -60,4 +60,18 @@ public class TravelController {
         return travelService.downloadImg(token, travelId, time);
     }
 
+    @GetMapping("/getWish")
+    public String getWish(@RequestParam("travelId")int travelId){
+        return travelService.getWish(travelId);
+    }
+
+    @PostMapping("/postWish")
+    public String postWish(@RequestBody HashMap<String, String> request ){
+        String token = request.get("token");
+        String flag = request.get("class");
+        String text = request.get("text");
+        int travelId = Integer.parseInt(request.get("travelId"));
+        return travelService.postWish(token, flag, text, travelId);
+    }
+
 }

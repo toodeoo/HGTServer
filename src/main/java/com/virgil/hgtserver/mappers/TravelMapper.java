@@ -1,5 +1,6 @@
 package com.virgil.hgtserver.mappers;
 
+import com.virgil.hgtserver.pojo.SummaryWish;
 import com.virgil.hgtserver.pojo.Travel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -35,4 +36,8 @@ public interface TravelMapper {
     void insertImg(@Param("token") String token , @Param("travelId") int travelId , @Param("time") String time , @Param("filePath") String filePath );
 
     String queryImgPath( @Param("token") String token , @Param("travelId") int travelId , @Param("time") String time );
+
+    List<SummaryWish> queryAllById( @Param("travelId") int travelId );
+
+    void insertWish( @Param("token") String token , @Param("class") String flag , @Param("text") String text , @Param("travelId") int travelId );
 }

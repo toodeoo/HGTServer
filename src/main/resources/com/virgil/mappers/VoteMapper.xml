@@ -8,7 +8,7 @@
     </select>
     <delete id="delBeyondTime">
         delete vote, voteText from vote left join voteText on vote.code = voteText.code
-                              where date(vote.endTime) not between date(#{endTime}) and date(startTime)
+                              where date(#{endTime}) > date(vote.endTime)
     </delete>
     <select id="size" resultType="String">
         select count(code) from vote

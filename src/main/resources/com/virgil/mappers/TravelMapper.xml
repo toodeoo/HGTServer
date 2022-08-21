@@ -46,4 +46,16 @@
     <select id="queryImgPath">
         select filePath from travelImg where token=#{token} and travelId=#{travelId} and time=#{time}
     </select>
+    <resultMap id="summary" type="com.virgil.hgtserver.pojo.SummaryWish">
+        <id column="token" property="token"/>
+        <id column="text" property="text"/>
+        <id column="travelId" property="travelId"/>
+        <id column="class" property="flag"/>
+    </resultMap>
+    <select id="queryAllById" resultMap="summary">
+        select * from summaryWish where travelId=#{travelId}
+    </select>
+    <insert id="insertWish">
+        insert into summaryWish (travelId, token, class, text) values (#{travelId}, #{token}, #{class}, #{text})
+    </insert>
 </mapper>

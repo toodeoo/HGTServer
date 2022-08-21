@@ -22,4 +22,8 @@ public interface TravelService {
     String uploadImg( String token ,int travelId ,String time ,String filePath );
 
     String downloadImg( String token ,int travelId ,String time );
+
+    String getWish( int travelId );
+
+    String postWish( String token ,String flag ,String text ,int travelId );
 }

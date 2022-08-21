@@ -25,7 +25,7 @@ public class VoteServiceImpl implements VoteService {
 
     @Scheduled(cron = "0 0 */1 * * ?")
     public void delHistory(){
-        if(voteMapper.size() != null) {
+        if(voteMapper.size() != null || !voteMapper.size().equals("0")) {
             voteMapper.delBeyondTime(LocalDate.now().toString());
         }
     }
@@ -33,7 +33,6 @@ public class VoteServiceImpl implements VoteService {
     @Override
     public String hasVote( String token ) {
         int code = 1;
-        delHistory();
         if(voteMapper.queryNumByToken(token) == null)
             code = 0;
         else if (voteMapper.queryNumByToken(token).equals("0"))
@@ -86,7 +85,11 @@ public class VoteServiceImpl implements VoteService {
         if(code != -1) {
             String[] text = voteMapper.queryTextByCode(code).split(" ");
             StringBuilder sb = new StringBuilder();
-            for (int i = 0 ; i < text.length ; i++) {
+            for (int i = 0 ; i < text.length; i++) {
+                if(!list.get(i).split("\\+")[0].equals(text[ i ].split("\\+")[0])) {
+                    sb.append(text[ i ]);
+                    continue;
+                }
                 sb.append(text[ i ].split("\\+")[ 0 ]);
                 int x = Integer.parseInt(text[ i ].split("\\+")[ 1 ]);
                 x += Integer.parseInt(list.get(i).split("\\+")[ 1 ]);

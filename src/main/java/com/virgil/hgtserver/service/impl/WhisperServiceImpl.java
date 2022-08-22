@@ -6,7 +6,6 @@ import com.virgil.hgtserver.mappers.TravelMapper;
 import com.virgil.hgtserver.mappers.UserMapper;
 import com.virgil.hgtserver.mappers.WhisperMapper;
 import com.virgil.hgtserver.pojo.Whisper;
-import com.virgil.hgtserver.service.UserService;
 import com.virgil.hgtserver.service.WhisperService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;

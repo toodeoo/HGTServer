@@ -8,11 +8,19 @@
         <id column="GROUP_CONCAT(distinct class)" property="flag"/>
         <id column="sum" property="summaryDouzi"/>
     </resultMap>
+    <resultMap id="wish" type="com.virgil.hgtserver.pojo.Wish">
+        <id column="travelId" property="travelId"/>
+        <id column="wish" property="wish"/>
+        <id column="token" property="token"/>
+        <id column="class" property="flag"/>
+        <id column="douzi" property="douzi"/>
+        <id column="isEnd" property="isEnd"/>
+    </resultMap>
     <select id="queryWish" resultType="com.virgil.hgtserver.pojo.Wish">
-        select * from wishList where travelId=#{travelId} and class=#{class}
+        select * from wishList where travelId=#{travelId} and class=#{class} and token is not null
     </select>
     <insert id="insertWish" parameterType="com.virgil.hgtserver.pojo.Wish">
-        insert into wishList values(#{travelId}, #{wish}, #{token}, #{class}, #{douzi}, #{isEnd})
+        insert into wishList values(#{travelId}, #{wish}, #{token}, #{flag}, #{douzi}, #{isEnd})
     </insert>
     <select id="queryDouzi" resultType="int">
         select douzi from wishList where token=#{token} and travelId=#{travelId} and wish=#{wish} and class=#{class}

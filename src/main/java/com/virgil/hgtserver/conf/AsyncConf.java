@@ -1,7 +1,6 @@
 package com.virgil.hgtserver.conf;
 
 import com.virgil.hgtserver.mappers.TravelDetailsMapper;
-import com.virgil.hgtserver.mappers.TravelMapper;
 import com.virgil.hgtserver.pojo.TravelDetails;
 import com.virgil.hgtserver.utils.WeightRandom;
 import org.springframework.scheduling.annotation.Async;

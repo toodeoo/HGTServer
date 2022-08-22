@@ -46,7 +46,7 @@ public class TravelServiceImpl implements TravelService {
     public String createTravel( Travel travel ) {
         int code = 1;
         int id = travelMapper.queryMaxId() + 1;
-        travel.setId(id);
+        travel.setTravelId(id);
         travel.setIsLeader(1);
         travel.setDate(new Date());
         travel.setActiveId(WeixinUtils.getActiveId(travel.getToken()));
@@ -57,7 +57,7 @@ public class TravelServiceImpl implements TravelService {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", code);
         jsonObject.put("activityId", travel.getActiveId());
-        jsonObject.put("travelId", travel.getId());
+        jsonObject.put("travelId", travel.getTravelId());
         return jsonObject.toJSONString();
     }
 
@@ -68,7 +68,7 @@ public class TravelServiceImpl implements TravelService {
         List<TravelIntro> retList = new ArrayList<>();
         for(Travel travel: list){
             TravelIntro travelIntro = new TravelIntro(travel);
-            travelIntro.setPeopleNum(travelMapper.queryPeopleNumById(travel.getId()));
+            travelIntro.setPeopleNum(travelMapper.queryPeopleNumById(travel.getTravelId()));
             retList.add(travelIntro);
         }
         JSONObject jsonObject = new JSONObject();
@@ -82,6 +82,7 @@ public class TravelServiceImpl implements TravelService {
     public String acceptShare( String encyData ,String iv ,String token ) throws InvalidAlgorithmParameterException, NoSuchPaddingException,
             IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         int code = 0;
+        JSONObject jsonObject = new JSONObject();
         String activeId = WeixinUtils.decode(encyData ,iv ,userMapper.querySessionByToken(token));
         if(travelMapper.isEqual(activeId) > 0){
             Travel origin = travelMapper.queryByActiveId(activeId);
@@ -89,9 +90,10 @@ public class TravelServiceImpl implements TravelService {
             travel.setToken(token);
             travelMapper.insertTravel(travel);
             code = 1;
-
+            jsonObject.put("travelId", travel.getTravelId());
         }
-        return JSONObject.toJSONString(new RetCode(code));
+        jsonObject.put("code", code);
+        return  jsonObject.toJSONString();
     }
 
     @Override
@@ -145,7 +147,7 @@ public class TravelServiceImpl implements TravelService {
 @Data
 class TravelIntro{
     public TravelIntro(Travel travel){
-        this.travelId = travel.getId();
+        this.travelId = travel.getTravelId();
         this.place = travel.getPlace();
         this.theme = travel.getTheme();
     }

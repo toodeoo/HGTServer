@@ -3,24 +3,18 @@ package com.virgil.hgtserver.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.virgil.hgtserver.conf.AsyncConf;
 import com.virgil.hgtserver.conf.RetCode;
 import com.virgil.hgtserver.conf.SummaryWish;
 import com.virgil.hgtserver.mappers.TravelDetailsMapper;
-import com.virgil.hgtserver.mappers.TravelMapper;
 import com.virgil.hgtserver.mappers.UserMapper;
 import com.virgil.hgtserver.mappers.WishMapper;
-import com.virgil.hgtserver.pojo.TravelDetails;
 import com.virgil.hgtserver.pojo.Wish;
 import com.virgil.hgtserver.service.WishService;
-import com.virgil.hgtserver.utils.WeightRandom;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 

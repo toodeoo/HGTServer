@@ -17,12 +17,12 @@ public class Travel {
         this.place = travel.getPlace();
         this.activeId = travel.getActiveId();
         this.date = travel.getDate();
-        this.id = travel.getId();
+        this.travelId = travel.getTravelId();
         this.isLeader = 0;
     }
     private String theme;
     private String place;
-    private int id;
+    private int travelId;
     private String work;
     private int isLeader;
     private String token;

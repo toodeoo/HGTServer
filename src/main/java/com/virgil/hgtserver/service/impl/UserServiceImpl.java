@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
             user.setOpenid(response.get("openid"));
             user.setSession_key(response.get("session_key"));
             user.setToken(user.getOpenid());
-            if(userMapper.isExist(user.getToken()) != null)
+            if(userMapper.isExist(user.getToken()).equals("0"))
                 userMapper.insertUser(user);
             else
                 userMapper.updateUserMsg(user);

@@ -41,10 +41,10 @@
         select travelId from travel where token=#{token} order by travelId desc limit 0, 1
     </select>
     <insert id="insertImg">
-        insert into travelImg (travelId, token, time, filePath) values (#{travelId}, #{token}, #{time}, #{filePath})
+        insert into travelImg (travelId, token, time, filePath, text) values (#{travelId}, #{token}, #{time}, #{filePath}, #{text})
     </insert>
-    <select id="queryImgPath">
-        select filePath from travelImg where token=#{token} and travelId=#{travelId} and time=#{time}
+    <select id="queryImgPath" resultType="com.virgil.hgtserver.pojo.TravelImg">
+        select filePath, text from travelImg where token=#{token} and travelId=#{travelId} and time=#{time}
     </select>
     <resultMap id="summary" type="com.virgil.hgtserver.pojo.SummaryWish">
         <id column="token" property="token"/>

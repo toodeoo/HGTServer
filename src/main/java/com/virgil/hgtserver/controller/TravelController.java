@@ -4,13 +4,18 @@ import com.virgil.hgtserver.pojo.Travel;
 import com.virgil.hgtserver.service.TravelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.io.File;
+import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 
 @RestController
@@ -46,12 +51,14 @@ public class TravelController {
     }
 
     @PostMapping("/uploadImg")
-    public String uploadImg( @RequestBody HashMap<String, String> request ){
-        String token = request.get("token");
-        int travelId = Integer.parseInt(request.get("travelId"));
-        String time = request.get("time");
-        String filePath = request.get("filePath");
-        return travelService.uploadImg(token, travelId, time, filePath);
+    public String uploadImg( @RequestPart("file")MultipartFile file, @RequestParam("token")String token,
+                             @RequestParam("travelId")int travelId, @RequestParam("text")String text, @RequestParam("time")String time)
+            throws IOException {
+        String filename = "/root/img/" + LocalTime.now().toString() + file.getOriginalFilename();
+        String filePath = "https://121.5.154.71" + filename;
+        File f = new File(filename);
+        file.transferTo(f);
+        return travelService.uploadImg(token, travelId, time, filePath, text);
     }
 
     @GetMapping("/downloadImg")

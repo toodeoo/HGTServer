@@ -2,6 +2,7 @@ package com.virgil.hgtserver.mappers;
 
 import com.virgil.hgtserver.pojo.SummaryWish;
 import com.virgil.hgtserver.pojo.Travel;
+import com.virgil.hgtserver.pojo.TravelImg;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -33,9 +34,10 @@ public interface TravelMapper {
 
     String queryMaxIdWithToken( @Param("token") String token );
 
-    void insertImg(@Param("token") String token , @Param("travelId") int travelId , @Param("time") String time , @Param("filePath") String filePath );
+    void insertImg(@Param("token") String token , @Param("travelId") int travelId , @Param("time") String time ,
+                   @Param("filePath") String filePath, @Param("text")String text );
 
-    String queryImgPath( @Param("token") String token , @Param("travelId") int travelId , @Param("time") String time );
+    TravelImg queryImgPath( @Param("token") String token ,@Param("travelId") int travelId ,@Param("time") String time );
 
     List<SummaryWish> queryAllById( @Param("travelId") int travelId );
 

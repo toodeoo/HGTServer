@@ -19,7 +19,7 @@ public interface TravelService {
 
     String getDetails(int travelId);
 
-    String uploadImg( String token ,int travelId ,String time ,String filePath );
+    String uploadImg( String token ,int travelId ,String time ,String filePath, String text );
 
     String downloadImg( String token ,int travelId ,String time );
 

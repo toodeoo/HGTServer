@@ -9,6 +9,7 @@ import com.virgil.hgtserver.mappers.WishMapper;
 import com.virgil.hgtserver.pojo.SummaryWish;
 import com.virgil.hgtserver.pojo.Travel;
 import com.virgil.hgtserver.pojo.TravelDetails;
+import com.virgil.hgtserver.pojo.TravelImg;
 import com.virgil.hgtserver.service.TravelService;
 import com.virgil.hgtserver.utils.WeixinUtils;
 import lombok.Data;
@@ -108,16 +109,16 @@ public class TravelServiceImpl implements TravelService {
     }
 
     @Override
-    public String uploadImg( String token ,int travelId ,String time ,String filePath ) {
-        travelMapper.insertImg(token, travelId, time, filePath);
+    public String uploadImg( String token ,int travelId ,String time ,String filePath, String text ) {
+        travelMapper.insertImg(token, travelId, time, filePath, text);
         return JSONObject.toJSONString(new RetCode(1));
     }
 
     @Override
     public String downloadImg( String token ,int travelId ,String time ) {
-        String filePath = travelMapper.queryImgPath(token, travelId, time);
+        TravelImg travelImg = travelMapper.queryImgPath(token, travelId, time);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("filePath", filePath);
+        jsonObject.put("travelImg", travelImg);
         return jsonObject.toJSONString();
     }
 

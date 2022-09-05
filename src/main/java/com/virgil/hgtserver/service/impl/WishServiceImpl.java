@@ -2,11 +2,11 @@ package com.virgil.hgtserver.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.virgil.hgtserver.conf.AsyncConf;
 import com.virgil.hgtserver.conf.RetCode;
 import com.virgil.hgtserver.conf.SummaryWish;
 import com.virgil.hgtserver.mappers.TravelDetailsMapper;
+import com.virgil.hgtserver.mappers.TravelMapper;
 import com.virgil.hgtserver.mappers.UserMapper;
 import com.virgil.hgtserver.mappers.WishMapper;
 import com.virgil.hgtserver.pojo.Wish;
@@ -29,6 +29,12 @@ public class WishServiceImpl implements WishService {
 
     @Autowired
     private TravelDetailsMapper travelDetailsMapper;
+
+    @Autowired
+    private TravelMapper travelMapper;
+
+    @Autowired
+    private AsyncConf asyncConf;
 
     @Override
     public String getWish( int travelId ,String flag , String token ) {
@@ -66,18 +72,22 @@ public class WishServiceImpl implements WishService {
 
     @Override
     public String addNewWish( String wish ,String flag ,String token , int travelId ) {
-        Wish w = new Wish(wish, travelId, token, flag, 0, 1);
+        Wish w = new Wish(wish, travelId, token, flag,0 ,  1);
         wishMapper.insertWish(w);
+        if(wishMapper.queryInSummary(wish, flag, travelId) == null)
+            wishMapper.insertToSummary(wish, flag, travelId, 0);
         return JSONObject.toJSONString(new RetCode(1));
     }
 
     @Override
-    public String endVote( String token , List<HashMap<String, Object>> list ,int isLeader, int travelId ) throws JsonProcessingException {
+    public String endVote( String token , List<HashMap<String, Object>> list , int travelId ){
+        int isLeader = travelMapper.queryIsLeader(token, travelId);
         for(HashMap<String, Object> item: list){
             List<ReqWish> reqWishes = JSONObject.parseArray(JSONArray.toJSONString(item.get("wishList")), ReqWish.class);
             String flag = (String) item.get("class");
             for(ReqWish reqWish: reqWishes){
-                int num = wishMapper.queryDouzi(token, travelId, reqWish.getWish(), flag);
+                System.out.println(reqWish);
+                int num = wishMapper.queryDouzi(travelId, reqWish.getWish(), flag);
                 wishMapper.updateDouzi(token, travelId, reqWish.getDouzi() + num, reqWish.getWish(), flag);
             }
         }
@@ -90,9 +100,9 @@ public class WishServiceImpl implements WishService {
             List<SummaryWish> summaryWishList = wishMapper.querySummary(travelId);
             Collections.sort(summaryWishList);
             Map<String, List<SummaryWish>> map = summaryWishList.stream().collect(Collectors.groupingBy(SummaryWish::getFlag));
-            AsyncConf asyncConf = new AsyncConf();
-            asyncConf.updateDetails(map, travelId, travelDetailsMapper);
             jsonObject.put("wishList", map);
+            jsonObject.put("memberNum", travelMapper.queryPeopleNumById(travelId));
+            asyncConf.updateDetails(map, travelId, travelDetailsMapper);
         }
         return jsonObject.toJSONString();
     }

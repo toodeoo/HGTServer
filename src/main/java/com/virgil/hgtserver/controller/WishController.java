@@ -33,10 +33,9 @@ public class WishController {
     @PostMapping("/endVote")
     public String endVote(@RequestBody HashMap<String, Object> request) throws JsonProcessingException {
         String token = (String) request.get("token");
-        int isLeader = (Integer) request.get("isLeader");
         int travelId = (Integer) request.get("travelId");
         List<HashMap<String, Object>> list = (List<HashMap<String, Object>>) request.get("item");
-        return wishService.endVote(token, list, isLeader, travelId);
+        return wishService.endVote(token, list, travelId);
     }
 
 }

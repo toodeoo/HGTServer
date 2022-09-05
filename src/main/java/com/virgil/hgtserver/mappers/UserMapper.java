@@ -20,4 +20,6 @@ public interface UserMapper {
     String queryAvatarByToken( @Param("token") String token );
 
     String queryUserName( @Param("token") String token );
+
+    void updateSessionKey( User user );
 }

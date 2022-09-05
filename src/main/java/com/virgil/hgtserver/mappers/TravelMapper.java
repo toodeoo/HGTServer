@@ -20,9 +20,9 @@ public interface TravelMapper {
 
     String queryWork( @Param("token")String token, @Param("travelId")int travelId );
 
-    int isEqual(String activeId);
+    int isEqual( @Param("activeId") String activeId);
 
-    Travel queryByActiveId(String activeId);
+    Travel queryByActiveId( @Param("activeId") String activeId);
 
     void updateWorkByToken( @Param("token")String token, @Param("work")String work, @Param("travelId")int travelId );
 
@@ -42,4 +42,6 @@ public interface TravelMapper {
     List<SummaryWish> queryAllById( @Param("travelId") int travelId );
 
     void insertWish( @Param("token") String token , @Param("class") String flag , @Param("text") String text , @Param("travelId") int travelId );
+
+    Travel queryTravel( Travel travel );
 }

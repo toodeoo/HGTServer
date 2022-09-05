@@ -10,5 +10,5 @@ public interface WishService {
 
     String addNewWish( String wish ,String flag ,String token ,int travelId );
 
-    String endVote( String token ,List<HashMap<String, Object>> list ,int isLeader, int travelId ) throws JsonProcessingException;
+    String endVote( String token ,List<HashMap<String, Object>> list ,int travelId ) throws JsonProcessingException;
 }

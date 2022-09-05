@@ -13,21 +13,23 @@
         <id column="wish" property="wish"/>
         <id column="token" property="token"/>
         <id column="class" property="flag"/>
-        <id column="douzi" property="douzi"/>
         <id column="isEnd" property="isEnd"/>
     </resultMap>
     <select id="queryWish" resultType="com.virgil.hgtserver.pojo.Wish">
         select * from wishList where travelId=#{travelId} and class=#{class} and token is not null
     </select>
     <insert id="insertWish" parameterType="com.virgil.hgtserver.pojo.Wish">
-        insert into wishList values(#{travelId}, #{wish}, #{token}, #{flag}, #{douzi}, #{isEnd})
+        insert into wishList values(#{travelId}, #{wish}, #{token}, #{flag}, #{isEnd})
     </insert>
+
+
     <select id="queryDouzi" resultType="int">
-        select douzi from wishList where token=#{token} and travelId=#{travelId} and wish=#{wish} and class=#{class}
+        select douzi from douzi where travelId=#{travelId} and wish=#{wish} and class=#{class}
     </select>
     <update id="updateDouzi" >
-        update wishList set douzi=#{douzi} where token=#{token} and travelId=#{travelId} and wish=#{wish} and class=#{class}
+        update douzi set douzi=#{douzi} where travelId=#{travelId} and wish=#{wish} and class=#{class}
     </update>
+
     <update id="updateIsEnd">
         update wishList set isEnd=0 where token=#{token} and travelId=#{travelId}
     </update>
@@ -37,10 +39,22 @@
     <update id="updateAllIsEnd">
         update wishList set isEnd=0 where travelId=#{travelId}
     </update>
+
     <select id="querySummary" resultMap="summaryMap">
-        select wish, group_concat(distinct class), sum(douzi) as sum from wishList where travelId=#{travelId} group by wish
+        select wish, group_concat(distinct class), sum(douzi) as sum from douzi where travelId=#{travelId} group by wish
     </select>
+
     <insert id="insertDefault" >
-        insert into wishList (travelId, wish, douzi, class) values (#{travelId}, #{wish}, #{douzi}, #{class})
+        insert into douzi (travelId, wish, class, douzi) values (#{travelId}, #{wish}, #{class}, #{douzi})
     </insert>
+
+    <select id="queryWishById" resultMap="wish">
+        select * from wishList where travelId=#{travelId}
+    </select>
+    <insert id="insertToSummary">
+        insert into douzi (wish, douzi, travelId, class) values (#{wish}, #{douzi}, #{travelId}, #{class})
+    </insert>
+    <select id="queryInSummary" resultType="String">
+        select douzi from douzi where wish=#{wish} and travelId=#{travelId} and class=#{class}
+    </select>
 </mapper>

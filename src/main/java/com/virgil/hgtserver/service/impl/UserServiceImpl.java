@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
             if(userMapper.isExist(user.getToken()).equals("0"))
                 userMapper.insertUser(user);
             else
-                userMapper.updateUserMsg(user);
+                userMapper.updateSessionKey(user);
 
             loginMsg.setToken(user.getToken());
             loginMsg.setErrcode("0");

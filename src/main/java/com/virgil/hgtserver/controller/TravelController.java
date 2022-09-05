@@ -6,15 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.File;
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
 
@@ -37,12 +30,10 @@ public class TravelController {
     }
 
     @PostMapping("/share")
-    public String acceptShare(@RequestBody HashMap<String, String> request) throws InvalidAlgorithmParameterException, NoSuchPaddingException,
-            IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        String encyData = request.get("encryptedData");
-        String iv = request.get("iv");
+    public String acceptShare(@RequestBody HashMap<String, String> request)  {
         String token = request.get("token");
-        return travelService.acceptShare(encyData, iv, token);
+        String activeId = request.get("activityId");
+        return travelService.acceptShare(token, activeId);
     }
 
     @GetMapping("/details")
@@ -55,7 +46,7 @@ public class TravelController {
                              @RequestParam("travelId")int travelId, @RequestParam("text")String text, @RequestParam("time")String time)
             throws IOException {
         String filename = "/root/img/" + LocalTime.now().toString() + file.getOriginalFilename();
-        String filePath = "https://121.5.154.71" + filename;
+        String filePath = "https://hangout.wang" + filename;
         File f = new File(filename);
         file.transferTo(f);
         return travelService.uploadImg(token, travelId, time, filePath, text);

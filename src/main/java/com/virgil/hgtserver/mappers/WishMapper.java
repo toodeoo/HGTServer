@@ -13,7 +13,7 @@ public interface WishMapper {
 
     void insertWish( Wish wish );
 
-    int queryDouzi( @Param("token") String token , @Param("travelId") int travelId, @Param("wish")String wish, @Param("class")String flag );
+    int queryDouzi( @Param("travelId") int travelId, @Param("wish")String wish, @Param("class")String flag );
 
     void updateDouzi( @Param("token") String token , @Param("travelId") int travelId , @Param("douzi") int douzi,
                       @Param("wish")String wish, @Param("class")String flag );
@@ -27,4 +27,10 @@ public interface WishMapper {
     List<SummaryWish> querySummary( @Param("travelId") int travelId );
 
     void insertDefault( @Param("wish") String wish , @Param("douzi") int douzi , @Param("class") String flag, @Param("travelId")int id);
+
+    List<Wish> queryWishById( @Param("travelId") int travelId );
+
+    void insertToSummary( @Param("wish") String wish , @Param("class") String flag ,@Param("travelId") int travelId , @Param("douzi") int i );
+
+    String queryInSummary( @Param("wish") String wish , @Param("class") String flag ,@Param("travelId") int travelId);
 }

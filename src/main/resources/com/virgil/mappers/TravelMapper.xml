@@ -7,13 +7,16 @@
         select travelId from travel order by travelId desc limit 0, 1
     </select>
     <insert id="insertTravel"   parameterType="com.virgil.hgtserver.pojo.Travel">
-        insert into travel values(#{id}, #{work}, #{isLeader}, #{token}, #{place}, #{theme}, #{date}, #{activeId})
+        insert into travel values(#{travelId}, #{work}, #{isLeader}, #{token}, #{place}, #{theme}, #{date}, #{activeId})
     </insert>
     <select id="queryByToken" parameterType="String"    resultType="com.virgil.hgtserver.pojo.Travel">
         select * from travel where token=#{token} order by travelId desc
     </select>
-    <select id="isEqual" parameterType="String">
+    <select id="isEqual" parameterType="String" resultType="int">
         select count(travelId) from travel where activeId=#{activeId}
+    </select>
+    <select id="queryTravel" parameterType="com.virgil.hgtserver.pojo.Travel" resultType="com.virgil.hgtserver.pojo.Travel">
+        select * from travel where travelId=#{travelId} and token=#{token}
     </select>
     <select id="queryByActiveId" parameterType="String" resultType="com.virgil.hgtserver.pojo.Travel">
         select * from travel where activeId=#{activeId}

@@ -11,17 +11,11 @@ import com.virgil.hgtserver.pojo.Travel;
 import com.virgil.hgtserver.pojo.TravelDetails;
 import com.virgil.hgtserver.pojo.TravelImg;
 import com.virgil.hgtserver.service.TravelService;
-import com.virgil.hgtserver.utils.WeixinUtils;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -50,7 +44,7 @@ public class TravelServiceImpl implements TravelService {
         travel.setTravelId(id);
         travel.setIsLeader(1);
         travel.setDate(new Date());
-        travel.setActiveId(WeixinUtils.getActiveId(travel.getToken()));
+        travel.setActiveId(LocalTime.now().toString());
         travelMapper.insertTravel(travel);
         wishMapper.insertDefault("外卖！！！", 10, "eat", id);
         wishMapper.insertDefault("不出门，自己做", 10, "eat", id);
@@ -80,16 +74,29 @@ public class TravelServiceImpl implements TravelService {
     }
 
     @Override
-    public String acceptShare( String encyData ,String iv ,String token ) throws InvalidAlgorithmParameterException, NoSuchPaddingException,
-            IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public String acceptShare( String token, String activeId ) {
         int code = 0;
         JSONObject jsonObject = new JSONObject();
-        String activeId = WeixinUtils.decode(encyData ,iv ,userMapper.querySessionByToken(token));
+        System.out.println(travelMapper.isEqual(activeId));
         if(travelMapper.isEqual(activeId) > 0){
             Travel origin = travelMapper.queryByActiveId(activeId);
             Travel travel = new Travel(origin);
             travel.setToken(token);
-            travelMapper.insertTravel(travel);
+            travel.setDate(origin.getDate());
+            if(travelMapper.queryTravel(travel) == null)
+                travelMapper.insertTravel(travel);
+/*            List<Wish> originList = wishMapper.queryWishById(travel.getTravelId());
+            Set<String> count = new HashSet<>();
+            for(Wish wish: originList){
+                if(wish.getToken() == null)
+                    continue;
+                if(!count.contains(wish.getWish())) {
+                    count.add(wish.getWish());
+                    wish.setToken(token);
+                    wish.setIsEnd(1);
+                    wishMapper.insertWish(wish);
+                }
+            }*/
             code = 1;
             jsonObject.put("travelId", travel.getTravelId());
         }
